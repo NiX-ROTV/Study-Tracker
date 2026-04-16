@@ -86,8 +86,8 @@ router.post('/forgotpassword', async (req, res) => {
 
     await utilizator.save();
 
-    // Creăm link-ul de resetare (folosim localhost pentru dev)
-    const resetUrl = `http://localhost:5174/reset-password/${resetToken}`;
+    // Creăm link-ul de resetare (folosim IP-ul local pentru acces de pe telefon)
+    const resetUrl = `http://192.168.0.143:5173/reset-password/${resetToken}`;
 
     const mesajEmail = `
       <h1>Ai solicitat resetarea parolei</h1>
