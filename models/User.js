@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  // Numele cu care se va loga utilizatorul
-  username: {
+  // Email-ul cu care se va loga utilizatorul
+  email: {
     type: String,
-    required: true,
-    unique: true // Baza de date nu va permite 2 conturi cu acelasi nume
+    required: [true, "Email-ul este obligatoriu"],
+    unique: true,
+    lowercase: true,
+    trim: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Te rugăm să introduci un email valid"]
   },
   // Parola (care va fi salvata in mod criptat)
   parola: {
@@ -16,7 +19,10 @@ const userSchema = new mongoose.Schema({
   data_creare: {
     type: Date,
     default: Date.now
-  }
+  },
+  // Token pentru resetarea parolei
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 });
 
 module.exports = mongoose.model('User', userSchema);
