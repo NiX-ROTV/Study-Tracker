@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path');
 
 // Import rute
 const authRoutes = require('./routes/authRoutes');
@@ -14,7 +13,7 @@ const scheduleRoutes = require('./routes/scheduleRoutes');
 
 const app = express();
 
-// 🔴 AICI E MAGIA: Deschidem CORS-ul pentru toata lumea ca sa dovedim ca asta era blocajul
+// AICI E MAGIA: Deschidem CORS-ul pentru toata lumea ca sa dovedim ca asta era blocajul
 app.use(cors({
     origin: '*'
 }));
@@ -28,6 +27,10 @@ mongoose.connect(dbURI)
     .then(() => console.log("Baza de date MongoDB Atlas conectata cu succes!"))
     .catch(err => console.log("Eroare la conectare Atlas:", err));
 
+// Ruta de baza (Health check) care tine serverul in viata pentru Railway
+app.get('/', (req, res) => {
+    res.send('Backend-ul din cloud functioneaza perfect!');
+});
 
 // Folosire rute
 app.use('/api', authRoutes); // /api/login, /api/register, /api/user
@@ -36,16 +39,7 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/homework', homeworkRoutes);
 app.use('/api/schedule', scheduleRoutes);
 
-// Servirea fișierelor statice de pe Frontend (React / Vite)
-const buildPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(buildPath));
-
-app.use((req, res, next) => {
-    if (req.path.startsWith('/api')) {
-        return res.status(404).json({ message: 'Eroare 404: Ruta API nu exista' });
-    }
-    res.sendFile(path.join(buildPath, 'index.html'));
-});
+// Am sters portiunea veche care servea fisierele statice de React
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
