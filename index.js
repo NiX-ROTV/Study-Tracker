@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 // Import rute
 const authRoutes = require('./routes/authRoutes');
@@ -23,9 +24,7 @@ mongoose.connect(dbURI)
     .then(() => console.log("Baza de date MongoDB Atlas conectata cu succes!"))
     .catch(err => console.log("Eroare la conectare Atlas:", err));
     
-app.get('/', (req, res) => {
-    res.send('Serverul functioneaza perfect!');
-});
+
 
 // Folosire rute
 app.use('/api', authRoutes); // /api/login, /api/register, /api/user
@@ -33,6 +32,14 @@ app.use('/api/subjects', subjectRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/homework', homeworkRoutes);
 app.use('/api/schedule', scheduleRoutes);
+
+// Servirea fișierelor statice de pe Frontend (React / Vite)
+const buildPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(buildPath));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+});
 
 // Pornirea serverului
 const PORT = process.env.PORT || 5000;
