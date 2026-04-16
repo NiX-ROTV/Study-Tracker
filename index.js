@@ -13,7 +13,16 @@ const homeworkRoutes = require('./routes/homeworkRoutes');
 const scheduleRoutes = require('./routes/scheduleRoutes');
 
 const app = express();
-app.use(cors());
+// Setăm politicile CORS specific pentru interfața ta
+app.use(cors({
+  origin: [
+    'https://study-tracker-front-ebon.vercel.app', 
+    'http://localhost:5173'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
+}));
 
 // Middleware pentru a citi datele JSON
 app.use(express.json());
