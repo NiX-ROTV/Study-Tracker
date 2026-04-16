@@ -13,15 +13,10 @@ const homeworkRoutes = require('./routes/homeworkRoutes');
 const scheduleRoutes = require('./routes/scheduleRoutes');
 
 const app = express();
-// Setăm politicile CORS specific pentru interfața ta
+
+// 🔴 AICI E MAGIA: Deschidem CORS-ul pentru toata lumea ca sa dovedim ca asta era blocajul
 app.use(cors({
-  origin: [
-    'https://study-tracker-front-ebon.vercel.app', 
-    'http://localhost:5173'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-  credentials: true
+    origin: '*'
 }));
 
 // Middleware pentru a citi datele JSON
@@ -32,7 +27,6 @@ const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI)
     .then(() => console.log("Baza de date MongoDB Atlas conectata cu succes!"))
     .catch(err => console.log("Eroare la conectare Atlas:", err));
-
 
 
 // Folosire rute
