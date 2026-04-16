@@ -37,7 +37,10 @@ app.use('/api/schedule', scheduleRoutes);
 const buildPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(buildPath));
 
-app.get('*', (req, res) => {
+app.use((req, res, next) => {
+    if (req.path.startsWith('/api')) {
+        return res.status(404).json({ message: 'Eroare 404: Ruta API nu exista' });
+    }
     res.sendFile(path.join(buildPath, 'index.html'));
 });
 
