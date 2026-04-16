@@ -23,7 +23,7 @@ const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI)
     .then(() => console.log("Baza de date MongoDB Atlas conectata cu succes!"))
     .catch(err => console.log("Eroare la conectare Atlas:", err));
-    
+
 
 
 // Folosire rute
@@ -44,8 +44,7 @@ app.use((req, res, next) => {
     res.sendFile(path.join(buildPath, 'index.html'));
 });
 
-// Pornirea serverului
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Serverul ruleaza pe portul ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Serverul ruleaza perfect si este deschis catre exterior pe portul ${PORT}`);
 });
