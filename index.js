@@ -35,7 +35,7 @@ app.use('/api/homework', homeworkRoutes);
 app.use('/api/schedule', scheduleRoutes);
 
 // Pornirea serverului
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Serverul ruleaza pe http://localhost:${PORT}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Serverul ruleaza pe portul ${PORT}`);
 });
