@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');      
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 const User = require('../models/User');
 const Subject = require('../models/Subject');
@@ -96,25 +96,14 @@ router.post('/forgotpassword', async (req, res) => {
       <p>Dacă nu ai solicitat acest lucru, te rugăm să ignori acest email.</p>
     `;
 
-    // Configurare transport Nodemailer (Standard pentru Gmail cu App Password)
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true, // Folosim SSL pe portul 465
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const mailOptions = {
-      from: `"Study Tracker" <${process.env.EMAIL_FROM}>`,
+    await resend.emails.send({
+      from: 'Study Tracker <onboarding@resend.dev>',
       to: utilizator.email,
-      subject: "Resetare Parolă - Study Tracker",
+      subject: 'Resetare Parolă - Study Tracker',
       html: mesajEmail,
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     res.json({ mesaj: "Email-ul de resetare a fost trimis!" });
 
