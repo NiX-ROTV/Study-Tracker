@@ -87,7 +87,7 @@ router.post('/forgotpassword', async (req, res) => {
     await utilizator.save();
 
     const frontendUrl = process.env.FRONTEND_URL || 'https://study-tracker-front-d4g7.onrender.com';
-    const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
+    const resetUrl = `${frontendUrl}/#/reset-password/${resetToken}`;
 
     const mesajEmail = `
       <h1>Ai solicitat resetarea parolei</h1>
